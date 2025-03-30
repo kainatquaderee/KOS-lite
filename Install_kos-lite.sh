@@ -108,7 +108,7 @@ apt autoremove -y && apt clean
 
 # Step 5: Create the start script in Termux
 echo -e "\n\e[1;34mCreating start script for KOS Lite...\e[0m"
-cat << 'EOF' > $PREFIX/bin/start-koslite                                               /data/data/com.termux/files/usr/bin/start-koslite
+cat << 'EOF' > $PREFIX/bin/start-koslite
 #!/bin/bash
 # Start KOS Lite with audio, microphone, and GPU support
 

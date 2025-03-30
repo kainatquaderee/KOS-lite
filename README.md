@@ -10,8 +10,8 @@ install termux
 run these commands:
 ```
 termux-change-repo
-pkg update && pkg upgrade
 pkg install x11-repo
+pkg update && pkg upgrade
 ```
 then run this to install KOS-lite
 

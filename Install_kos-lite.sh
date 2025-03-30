@@ -83,11 +83,11 @@ echo 'Enabled=false' >> /home/$username/.config/kwinrc
 cat <<'EOF' > /home/$username/.config/kcm-about-distrorc
 [General]
 
-LogoPath=/home/.logo
+LogoPath=/home/$username/.logo
 Website=https://github.com/kainatquaderee/KOS-lite/
 Version=1.27
 EOF
-
+wget -O /home/$username/.logo https://github.com/kainatquaderee/KOS-lite/blob/main/logo.png
 PRETTY_NAME="KOS-LITE-1.27"
 
 sed -i "s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g" /etc/os-release

@@ -73,14 +73,24 @@ apt update -y && apt upgrade -y
 apt install -y plasma-desktop kde-plasma-desktop
 
 # Disable window compositor and desktop effects
-mkdir -p /home/koslite/.config/
-echo '[Compositing]' > /home/koslite/.config/kwinrc
-echo 'Enabled=false' >> /home/koslite/.config/kwinrc
-echo '[Effect-Blur]' >> /home/koslite/.config/kwinrc
-echo 'Enabled=false' >> /home/koslite/.config/kwinrc
-echo '[Effect-Login]' >> /home/koslite/.config/kwinrc
-echo 'Enabled=false' >> /home/koslite/.config/kwinrc
+mkdir -p /home/$username/.config/
+echo '[Compositing]' > /home/$username/.config/kwinrc
+echo 'Enabled=false' >> /home/$username/.config/kwinrc
+echo '[Effect-Blur]' >> /home$$username/.config/kwinrc
+echo 'Enabled=false' >> /home/$username/.config/kwinrc
+echo '[Effect-Login]' >> /home/$username/.config/kwinrc
+echo 'Enabled=false' >> /home/$username/.config/kwinrc
+cat <<'EOF' > /home/$username/.config/kcm-about-distrorc
+[General]
 
+LogoPath=/home/.logo
+Website=https://github.com/kainatquaderee/KOS-lite/
+Version=1.27
+EOF
+
+PRETTY_NAME="KOS-LITE-1.27"
+
+sed -i "s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g" /etc/os-release
 # Install PulseAudio and related utilities
 apt install -y pulseaudio pulseaudio-utils pavucontrol
 
@@ -88,8 +98,8 @@ apt install -y pulseaudio pulseaudio-utils pavucontrol
 apt install -y mesa-utils
 
 # Set environment variables for PulseAudio
-echo 'export PULSE_SERVER=127.0.0.1' >> /home/koslite/.bashrc
-echo 'export DISPLAY=:1' >> /home/koslite/.bashrc
+echo 'export PULSE_SERVER=127.0.0.1' >> /home/$username/.bashrc
+echo 'export DISPLAY=:1' >> /home/$username/.bashrc
 
 # Install additional utilities
 apt install -y nano htop easyeffects gimp 

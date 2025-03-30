@@ -31,15 +31,15 @@ spinner() {
     printf "    \b\b\b\b"
 }
 
-# Step 1: Update and upgrade Termux packages
+# Update and upgrade Termux packages
 echo -e "\n\e[1;34mUpdating and upgrading Termux packages...\e[0m"
 pkg update -y && pkg upgrade -y & spinner
 
-# Step 2: Install necessary repositories and packages
+# Install necessary repositories and packages
 echo -e "\n\e[1;34mInstalling required repositories and packages...\e[0m"
 pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa zlib & spinner
 
-# Step 2.2: Configure PulseAudio settings
+# Configure PulseAudio settings
 echo -e "\n\e[1;34mConfiguring PulseAudio settings...\e[0m"
 cat << 'EOF' >> $PREFIX/etc/pulse/default.pa
 load-module module-sles-sink
@@ -52,11 +52,11 @@ EOF
 read -p "enter Your new USERNAME: " username
 read -sp "enter password for new user: " password
 
-# Step 3: Install KOS Lite (Ubuntu) using proot-distro
+# Install KOS Lite (Ubuntu) using proot-distro
 echo -e "\n\e[1;34mInstalling KOS Lite distribution...\e[0m"
 proot-distro install ubuntu & spinner
 
-# Step 4: Configure the KOS Lite environment
+# Configure the KOS Lite environment
 echo -e "\n\e[1;34mConfiguring KOS Lite environment...\e[0m"
 proot-distro login ubuntu -- bash -c "
 
@@ -112,7 +112,7 @@ apt install firefox
 apt autoremove -y && apt clean
 " & spinner
 
-# Step 5: Create the start script in Termux
+# Create the start script in Termux
 echo -e "\n\e[1;34mCreating start script for KOS Lite...\e[0m"
 cat << 'EOF' > $PREFIX/bin/start-koslite
 #!/bin/bash

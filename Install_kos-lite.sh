@@ -59,7 +59,7 @@ proot-distro login ubuntu -- bash -c "
 read -p "enter Your new USERNAME: " username
 read -sp "enter password for new user: " password
 # Create a new user
-useradd -m -G sudo -s /bin/bash koslite
+useradd -m -G sudo -s /bin/bash $username
 echo "$username:$password" | chpasswd
 #add user to the sudoers
 cp /etc/sudoers /etc/sudoers.bak

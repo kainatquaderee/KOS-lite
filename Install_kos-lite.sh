@@ -131,3 +131,5 @@ proot-distro login ubuntu --user koslite --shared-tmp -- bash -c "
     startplasma-x11"
 EOF
 chmod +x $PREFIX/bin/start-koslite
+echo installation is finished. now run "start-koslite" to start the os
+

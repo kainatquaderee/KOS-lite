@@ -48,6 +48,10 @@ load-module module-null-sink sink_name=virtspk sink_properties=device.descriptio
 load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 EOF
 
+#get a username and password from user
+read -p "enter Your new USERNAME: " username
+read -sp "enter password for new user: " password
+
 # Step 3: Install KOS Lite (Ubuntu) using proot-distro
 echo -e "\n\e[1;34mInstalling KOS Lite distribution...\e[0m"
 proot-distro install ubuntu & spinner
@@ -55,22 +59,12 @@ proot-distro install ubuntu & spinner
 # Step 4: Configure the KOS Lite environment
 echo -e "\n\e[1;34mConfiguring KOS Lite environment...\e[0m"
 proot-distro login ubuntu -- bash -c "
-#get a username and password from user
-read -p "enter Your new USERNAME: " username
-read -sp "enter password for new user: " password
+
+
 # Create a new user
 useradd -m -G sudo -s /bin/bash $username
 echo "$username:$password" | chpasswd
-#add user to the sudoers
-cp /etc/sudoers /etc/sudoers.bak
-echo "$username ALL=(ALL) ALL" | sudo EDITOR="tee -a" visudo
-if [ $? -eq 0 ]; then
-    echo "User $username has been successfully added to sudoers."
-else
-    echo "Failed to add $username to sudoers. Restoring backup."
-    cp /etc/sudoers.bak /etc/sudoers
-fi
-rm /etc/sudoers.bak
+
 # Update and upgrade packages within KOS Lite
 apt update -y && apt upgrade -y
 

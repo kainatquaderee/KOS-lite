@@ -11,4 +11,4 @@ pkg update && pkg upgrade
 pkg install x11-repo
 ```
 then run this to install KOS-lite
-`bash -c "$(curl -fsSL <script_url>)"
+`bash -c "$(curl -fsSL https://raw.githubusercontent.com/kainatquaderee/KOS-lite/refs/heads/main/Install_kos-lite.sh)"`

@@ -21,3 +21,7 @@ then run this to install KOS-lite
 ```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/kainatquaderee/KOS-lite/refs/heads/main/Install_kos-lite.sh)"
 ```
+then run with this:
+```
+start-koslite
+```

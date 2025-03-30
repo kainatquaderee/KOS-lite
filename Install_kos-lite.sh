@@ -63,9 +63,9 @@ proot-distro login ubuntu -- bash -c "
 
 # Create a new user
 useradd -m -G sudo -s /bin/bash $username
-echo "$username:$password" | chpasswd
+`echo "$username:$password" | chpasswd`
 #add user to sudoers
-echo "$username ALL=(ALL:ALL) ALL" > /etc/sudoers.d/$username-sudoers
+`echo "$username ALL=(ALL:ALL) ALL" > /etc/sudoers.d/$username-sudoers`
 # Update and upgrade packages within KOS Lite
 apt update -y && apt upgrade -y
 

@@ -64,7 +64,8 @@ proot-distro login ubuntu -- bash -c "
 # Create a new user
 useradd -m -G sudo -s /bin/bash $username
 echo "$username:$password" | chpasswd
-
+#add user to sudoers
+echo "$username ALL=(ALL:ALL) ALL" > /etc/sudoers.d/$username-sudoers
 # Update and upgrade packages within KOS Lite
 apt update -y && apt upgrade -y
 
@@ -96,7 +97,7 @@ apt install -y nano htop easyeffects gimp
 # remove snap and ban snap and install firefox non snap ofcourse.
 apt autoremove --purge snapd
 apt-mark hold snapd
-add-apt-repository ppa:mozillateam/ppa
+add-apt-repository ppa:mozillateam/ppa -y
 echo '
 Package: *
 Pin: release o=LP-PPA-mozillateam

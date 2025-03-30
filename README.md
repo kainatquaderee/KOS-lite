@@ -1,7 +1,10 @@
 # KOS-lite
 Linux desktop environment for Android via termux proot. 
 you need to setup termux before if you hadn't already.
-
+prerequisites:
+termux [github](https://github.com/termux/termux-app) [f-droid](https://f-droid.org/en/packages/com.termux/)
+termux-x11 [github-repo](https://github.com/termux/termux-x11) [release](https://github.com/termux/termux-x11/releases/tag/nightly)
+termux-api [github](https://github.com/termux/termux-api) [f-droid](https://f-droid.org/en/packages/com.termux.api/)
 #firstime on termux?
 install termux
 run these commands:

@@ -122,6 +122,7 @@ apt autoremove -y && apt clean
 echo -e "\n\e[1;34mCreating start script for KOS Lite...\e[0m"
 cat << 'EOF' > $PREFIX/bin/start-koslite
 #!/bin/bash
+source $PREFIX/etc/xuname
 # Start KOS Lite with audio, microphone, and GPU support
 
 # Start Termux X11
@@ -136,12 +137,14 @@ pulseaudio --start --exit-idle-time=-1
 virgl_test_server_android &
 
 # Login to KOS Lite (Ubuntu) and start the desktop environment
-proot-distro login ubuntu --user koslite --shared-tmp -- bash -c "
+proot-distro login ubuntu --user $username --shared-tmp -- bash -c "
     export DISPLAY=:1
     export PULSE_SERVER=127.0.0.1
     pactl load-module module-tunnel-source server=127.0.0.1
     startplasma-x11"
 EOF
 chmod +x $PREFIX/bin/start-koslite
+#store username  to /etc/xuname
+echo "username=$username" > $PREFIX/etc/xuname
 echo installation is finished. now run "start-koslite" to start the os
 

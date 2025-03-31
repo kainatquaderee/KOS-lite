@@ -16,7 +16,7 @@ echo "---------------------------------------------"
 echo "KOS Lite (Kainat OS Lite) - Lightweight Desktop for Termux"
 echo ""
 #define all the vars
-PRETTY_NAME="KOS-LITE-1.27"
+PRETTY_NAME="KOS-LITE"
 # Animation: Spinning loader
 spinner() {
     local pid=$!
@@ -97,6 +97,7 @@ wget -O /home/$username/.logo https://raw.githubusercontent.com/kainatquaderee/K
 
 
 sed -i \"s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g\" /etc/os-release
+sed -i \"s/NAME=.*$/NAME=$PRETTY_NAME/g\" /etc/os-release
 # Install PulseAudio and related utilities
 apt install -y pulseaudio pulseaudio-utils pavucontrol
 

@@ -82,10 +82,33 @@ apt install -y plasma-desktop kde-plasma-desktop
 mkdir -p /home/$username/.config/
 echo '[Compositing]' > /home/$username/.config/kwinrc
 echo 'Enabled=false' >> /home/$username/.config/kwinrc
-echo '[Effect-Blur]' >> /home$$username/.config/kwinrc
+echo '[Effect-Blur]' >> /home/$username/.config/kwinrc
 echo 'Enabled=false' >> /home/$username/.config/kwinrc
 echo '[Effect-Login]' >> /home/$username/.config/kwinrc
 echo 'Enabled=false' >> /home/$username/.config/kwinrc
+cat <<'EOF' >> /home/$username/.config/kwinrc
+[Plugins]
+blurEnabled=false
+contrastEnabled=false
+desktopgridEnabled=false
+kwin4_effect_dialogparentEnabled=false
+kwin4_effect_fadingpopupsEnabled=false
+kwin4_effect_frozenappEnabled=false
+kwin4_effect_fullscreenEnabled=false
+kwin4_effect_loginEnabled=false
+kwin4_effect_logoutEnabled=false
+kwin4_effect_maximizeEnabled=false
+kwin4_effect_morphingpopupsEnabled=false
+kwin4_effect_scaleEnabled=false
+kwin4_effect_squashEnabled=false
+overviewEnabled=false
+screenedgeEnabled=false
+slideEnabled=false
+slidingpopupsEnabled=false
+tileseditorEnabled=false
+windowviewEnabled=false
+zoomEnabled=false
+EOF
 cat <<'EOF' > /home/$username/.config/kcm-about-distrorc
 [General]
 

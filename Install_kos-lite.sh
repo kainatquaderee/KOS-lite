@@ -15,7 +15,11 @@ echo "  ╚═╝  ╚═╝  ╚═════╝ ╚══════╝    
 echo "---------------------------------------------"
 echo "KOS Lite (Kainat OS Lite) - Lightweight Desktop for Termux"
 echo ""
-
+#define all the vars
+upassx="$username:$password"
+sudoersx="$username ALL=(ALL:ALL) ALL"
+PRETTY_NAME="KOS-LITE-1.27"
+PRETTY_NAME_PH="s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g"
 # Animation: Spinning loader
 spinner() {
     local pid=$!
@@ -63,9 +67,9 @@ proot-distro login ubuntu -- bash -c "
 
 # Create a new user
 useradd -m -G sudo -s /bin/bash $username
-$(echo "$username:$password" | chpasswd)
+echo $upassx | chpasswd
 #add user to sudoers
-$(echo "$username ALL=(ALL:ALL) ALL" > /etc/sudoers.d/$username-sudoers)
+echo $sudoerx > /etc/sudoers.d/$username-sudoers
 # Update and upgrade packages within KOS Lite
 apt update -y && apt upgrade -y
 
@@ -88,9 +92,9 @@ Website=https://github.com/kainatquaderee/KOS-lite/
 Version=1.27
 EOF
 wget -O /home/$username/.logo https://github.com/kainatquaderee/KOS-lite/blob/f0fb1bc8bcfa5269bac2fa185a9b3068c8d43f3a/logo.png
-PRETTY_NAME="KOS-LITE-1.27"
 
-$(sed -i "s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g" /etc/os-release)
+
+sed -i $PRETTY_NAME_PH  /etc/os-release
 # Install PulseAudio and related utilities
 apt install -y pulseaudio pulseaudio-utils pavucontrol
 
@@ -121,7 +125,7 @@ apt update
 apt install firefox
 # Clean up
 apt autoremove -y && apt clean
-" & spinner
+"& spinner
 
 # Create the start script in Termux
 echo -e "\n\e[1;34mCreating start script for KOS Lite...\e[0m"

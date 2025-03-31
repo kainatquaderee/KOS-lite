@@ -16,10 +16,7 @@ echo "---------------------------------------------"
 echo "KOS Lite (Kainat OS Lite) - Lightweight Desktop for Termux"
 echo ""
 #define all the vars
-upassx="$username:$password"
-sudoersx="$username ALL=(ALL:ALL) ALL"
 PRETTY_NAME="KOS-LITE-1.27"
-PRETTY_NAME_PH="s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g"
 # Animation: Spinning loader
 spinner() {
     local pid=$!
@@ -67,10 +64,10 @@ proot-distro login ubuntu -- bash -c "
 
 # Create a new user
 useradd -m -G sudo -s /bin/bash $username
-echo $upassx | chpasswd
+echo \"$username:$password\" | chpasswd
 #add user to sudoers
 if [ -d /etc/sudoers.d ]; then
-    echo $sudoerx > /etc/sudoers.d/${username}-sudoers
+    echo \"$username ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/${username}-sudoers
 else
     mkdir -p /etc/sudoers.d
 fi
@@ -99,7 +96,7 @@ EOF
 wget -O /home/$username/.logo https://raw.githubusercontent.com/kainatquaderee/KOS-lite/refs/heads/main/logo.png
 
 
-sed -i $PRETTY_NAME_PH  /etc/os-release
+sed -i \"s/PRETTY_NAME=.*$/PRETTY_NAME=$PRETTY_NAME/g\" /etc/os-release
 # Install PulseAudio and related utilities
 apt install -y pulseaudio pulseaudio-utils pavucontrol
 

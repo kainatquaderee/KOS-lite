@@ -127,7 +127,7 @@ Pin: version 1:1snap*
 Pin-Priority: -1
 ' | tee /etc/apt/preferences.d/mozilla-firefox
 apt update
-apt install firefox
+apt install firefox -y
 # Clean up
 apt autoremove -y && apt clean
 "& spinner

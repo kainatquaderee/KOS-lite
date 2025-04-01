@@ -70,6 +70,7 @@ if [ -d /etc/sudoers.d ]; then
     echo \"$username ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/${username}-sudoers
 else
     mkdir -p /etc/sudoers.d
+    echo \"$username ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/${username}-sudoers
 fi
 
 # Update and upgrade packages within KOS Lite

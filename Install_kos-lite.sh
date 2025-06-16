@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # KOS Lite Installation Script
+# License: GPL-3#!/bin/bash
+
+# KOS Lite Installation Script
 # License: GPL-3.0
 # Developer: Kainat Quaderee
 
@@ -15,10 +18,10 @@ echo "  ╚═╝  ╚═╝  ╚═════╝ ╚══════╝    
 echo "---------------------------------------------"
 echo
 
-# Spinner animation function
-t_spinner() {
-    local pid=$!
-    local delay=0.1
+#!/bin/bash
+
+# KOS Lite Installation Script
+# License: GPL-3    local delay=0.1
     local spinstr='|/-\\'
     while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
         local temp=${spinstr#?}
@@ -70,7 +73,10 @@ apt update -y && apt upgrade -y
 apt install -y plasma-desktop kde-plasma-desktop pulseaudio pulseaudio-utils pavucontrol mesa-utils nano htop easyeffects gimp
 
 # Download and install Kainat OS packages
-wget -O /tmp/kainat-os-sources.deb "https://sourceforge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download"
+wge#!/bin/bash
+
+# KOS Lite Installation Script
+# License: GPL-3orge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download"
 dpkg -i /tmp/kainat-os-sources.deb || apt-get -f install -y
 # Refresh package lists after adding new sources
 apt-get update -y
@@ -89,16 +95,20 @@ cat << 'EOF' > $PREFIX/bin/start-koslite
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
 XDG_RUNTIME_DIR=${TMPDIR}
 termux-x11 :1 -ac &
+
 # Start PulseAudio
 pulseaudio --start --exit-idle-time=-1
+
 # Start VirGL
 virgl_test_server_android &
+
 # Login to Debian and launch KDE
-proot-distro login debian --user $username --shared-tmp -- bash -c "
+proot-distro login --shared-tmp --user "$username" debian -- bash -c "
     export DISPLAY=:1
     export PULSE_SERVER=127.0.0.1
     pactl load-module module-tunnel-source server=127.0.0.1
-    startplasma-x11"
+    startplasma-x11
+"
 EOF
 chmod +x $PREFIX/bin/start-koslite
 

@@ -1,6 +1,9 @@
 #!/bin/bash
 
-# KOS Lite Installation Script with PC Gaming Support
+# KOS Lite Installation Script
+# License: GPL-3#!/bin/bash
+
+# KOS Lite Installation Script
 # License: GPL-3.0
 # Developer: Kainat Quaderee
 
@@ -15,15 +18,15 @@ echo "  ╚═╝  ╚═╝  ╚═════╝ ╚══════╝    
 echo "---------------------------------------------"
 echo
 
-# Spinner function for background tasks
-t_spinner() {
-    local pid=$!
-    local delay=0.1
+#!/bin/bash
+
+# KOS Lite Installation Script
+# License: GPL-3    local delay=0.1
     local spinstr='|/-\\'
-    while ps -p $pid > /dev/null; do
+    while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
         local temp=${spinstr#?}
         printf " [%c]  " "$spinstr"
-        spinstr=$temp${spinstr%%$temp}
+        spinstr=$temp${spinstr%"$temp"}
         sleep $delay
         printf "\b\b\b\b\b\b"
     done
@@ -34,10 +37,9 @@ t_spinner() {
 echo -e "\n\e[1;34mUpdating Termux packages...\e[0m"
 pkg update -y && pkg upgrade -y & t_spinner
 
-# Install required Termux repositories and packages, including Box64, Box86, and Wine
+# Install required repositories and packages
 echo -e "\n\e[1;34mInstalling required Termux packages...\e[0m"
-pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa \
-zlib box64 box86 wine wine64 wine32 & t_spinner
+pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa zlib & t_spinner
 
 # Configure PulseAudio
 echo -e "\n\e[1;34mConfiguring PulseAudio...\e[0m"
@@ -66,21 +68,17 @@ useradd -m -G sudo -s /bin/bash $username
 echo \"$username:$password\" | chpasswd
 echo \"$username ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/${username}-sudoers
 
-# Enable i386 architecture for Wine
-dpkg --add-architecture i386
-apt update -y
-
-# Update, upgrade and install desktop + gaming tools
-apt upgrade -y
-echo -e '\n\e[1;34mInstalling KDE desktop and core packages...\e[0m'
+# Update, upgrade and install desktop
+apt update -y && apt upgrade -y
 apt install -y plasma-desktop kde-plasma-desktop pulseaudio pulseaudio-utils pavucontrol mesa-utils nano htop easyeffects gimp
 
-echo -e '\n\e[1;34mInstalling Wine and dependencies for PC gaming...\e[0m'
-apt install -y wine64 wine32 winetricks cabextract libfaudio0 libfaudio0:i386
-
 # Download and install Kainat OS packages
-wget -O /tmp/kainat-os-sources.deb "https://downloads.sourceforge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb"
+wge#!/bin/bash
+
+# KOS Lite Installation Script
+# License: GPL-3orge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download"
 dpkg -i /tmp/kainat-os-sources.deb || apt-get -f install -y
+# Refresh package lists after adding new sources
 apt-get update -y
 apt install -y kainat-os-core
 
@@ -109,10 +107,46 @@ proot-distro login --shared-tmp --user "$username" debian -- bash -c "
     export DISPLAY=:1
     export PULSE_SERVER=127.0.0.1
     pactl load-module module-tunnel-source server=127.0.0.1
-    # Launch KDE Plasma
     startplasma-x11
 "
 EOF
 chmod +x $PREFIX/bin/start-koslite
+proot-distro login debian -- bash -c "
 
-echo "Installation complete. Run 'start-koslite' to launch your KOS Lite with PC gaming support!"
+# 1. Install dependencies
+apt install -y cmake git build-essential gcc g++ python3 libc6:i386 libstdc++6:i386 libx11-6:i386 libxext6:i386 libgl1-mesa-glx:i386 libfreetype6:i386 libglu1-mesa:i386 mesa-utils wget
+
+# 2. Build and install box64
+cd /opt
+git clone https://github.com/ptitSeb/box64
+cd box64
+mkdir build && cd build
+cmake .. -DRUN_FROM_BUILD=1
+make -j$(nproc)
+ln -s /opt/box64/build/box64 /usr/local/bin/box64
+
+# 3. Build and install box86
+cd /opt
+git clone https://github.com/ptitSeb/box86
+cd box86
+mkdir build && cd build
+cmake .. -DRUN_FROM_BUILD=1
+make -j$(nproc)
+ln -s /opt/box86/build/box86 /usr/local/bin/box86
+
+# 4. Install Wine (x86, 32-bit)
+dpkg --add-architecture i386
+apt update
+apt install -y wine32
+
+# 5. Setup environment wrapper
+echo 'export BOX64_LOG=1' >> /etc/profile
+echo 'export BOX86_LOG=1' >> /etc/profile
+echo 'alias wine=\"box86 wine\"' >> /etc/profile
+source /etc/profile
+
+# 6. (Optional) Install winetricks
+apt install -y winetricks
+"
+
+echo "Installation complete. Run 'start-koslite' to launch."

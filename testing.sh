@@ -31,7 +31,6 @@ echo
         printf "\b\b\b\b\b\b"
     done
     printf "    \b\b\b\b"
-}
 
 # Update and upgrade Termux packages
 echo -e "\n\e[1;34mUpdating Termux packages...\e[0m"

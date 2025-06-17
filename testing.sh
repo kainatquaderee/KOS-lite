@@ -1,135 +1,137 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# KOS Lite Installation Script
+# KOS Lite Installation Script (Debian-based, unbranded, now with gaming support)
 # License: GPL-3.0
 # Developer: Kainat Quaderee
 
+# Display KOS Lite ASCII Logo
+echo "---------------------------------------------"
+echo "  ██╗  ██╗  ██████╗ ███████╗     ██╗     ██╗████████╗███████╗"
+echo "  ██║ ██╔╝ ██╔═══██╗██╔════╝     ██║     ██║╚══██╔══╝██╔════╝"
+echo "  █████╔╝  ██║   ██║███████╗     ██║     ██║   ██║   █████╗  "
+echo "  ██╔═██╗  ██║   ██║╚════██║     ██║     ██║   ██║   ██╔══╝  "
+echo "  ██║  ██╗ ╚██████╔╝███████║     ███████╗██║   ██║   ███████╗"
+echo "  ╚═╝  ╚═╝  ╚═════╝ ╚══════╝     ╚══════╝╚═╝   ╚═╝   ╚══════╝"
+echo "---------------------------------------------"
+echo "KOS Lite (Debian) - Lightweight Desktop for Termux"
+echo ""
+
+# Spinning loader animation
 spinner() {
     local pid=$!
     local delay=0.1
-    local spinstr='|/-\\'
-    while ps -p "$pid" &>/dev/null; do
+    local spinstr='|/-\'
+    while ps -p $pid > /dev/null 2>&1; do
         local temp=${spinstr#?}
         printf " [%c]  " "$spinstr"
-        spinstr=$temp${spinstr%$temp}
+        spinstr=$temp${spinstr%"$temp"}
         sleep $delay
         printf "\b\b\b\b\b\b"
     done
     printf "    \b\b\b\b"
 }
 
-# 1. Update Termux packages
-echo -e "\n\e[1;34mUpdating Termux packages...\e[0m"
+# Update and upgrade Termux packages
+echo -e "\n\e[1;34mUpdating and upgrading Termux packages...\e[0m"
 pkg update -y && pkg upgrade -y & spinner
 
-# 2. Install Termux repos and packages
-echo -e "\n\e[1;34mInstalling Termux packages...\e[0m"
+# Install necessary repos & packages
+echo -e "\n\e[1;34mInstalling required repositories and packages...\e[0m"
 pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa zlib & spinner
 
-# 3. Configure PulseAudio
-echo -e "\n\e[1;34mConfiguring PulseAudio...\e[0m"
-cat << 'EOF' >> "$PREFIX/etc/pulse/default.pa"
+# Configure PulseAudio in Termux
+echo -e "\n\e[1;34mConfiguring PulseAudio settings...\e[0m"
+cat << 'EOF' >> $PREFIX/etc/pulse/default.pa
 load-module module-sles-sink
 load-module module-sles-source
 load-module module-null-sink sink_name=virtspk sink_properties=device.description=Virtual_Speaker
 load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 EOF
 
-# 4. Prompt for user credentials
-read -p "Enter new USERNAME: " username
-read -sp "Enter password: " password
-echo
+# Prompt for new user credentials
+read -p "Enter your new USERNAME: " username
+read -sp "Enter password for new user: " password
+echo ""
 
-# 5. Install Debian via proot-distro
+# Install Debian via proot-distro
 echo -e "\n\e[1;34mInstalling Debian distribution...\e[0m"
 proot-distro install debian & spinner
 
-# 6. Configure Debian environment
-echo -e "\n\e[1;34mConfiguring Debian environment...\e[0m"
-proot-distro login debian -- bash -eux << 'DEBIAN_SETUP'
+# Configure inside Debian
+echo -e "\n\e[1;34mEntering Debian to configure system...\e[0m"
+proot-distro login debian -- bash -c "
 
-# Create user and grant sudo
-useradd -m -G sudo -s /bin/bash "$username"
-echo "$username:$password" | chpasswd
-echo "$username ALL=(ALL:ALL) ALL" > /etc/sudoers.d/${username}-sudoers
+# Create a new user with sudo privileges
+useradd -m -G sudo -s /bin/bash $username
+echo \"$username:$password\" | chpasswd
+mkdir -p /etc/sudoers.d
+echo \"$username ALL=(ALL:ALL) ALL\" > /etc/sudoers.d/${username}-sudoers
 
-# Update, upgrade and install desktop
+# Update & upgrade inside Debian
 apt update -y && apt upgrade -y
-apt install -y plasma-desktop kde-plasma-desktop pulseaudio pulseaudio-utils pavucontrol mesa-utils nano htop easyeffects gimp
 
-# Download and install Kainat OS packages
-download_url="https://forge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download"
-wget -O /tmp/kainat-os-sources.deb "$download_url"
-dpkg -i /tmp/kainat-os-sources.deb || apt-get -f install -y
-apt-get update -y
+# Download and install KainatOS core packages
+echo -e '\n\e[1;34mDownloading kainat-os-sources.deb...\e[0m'
+wget -O /home/$username/kainat-os-sources.deb https://sourceforge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download
+echo -e '\n\e[1;34mInstalling kainat-os-sources.deb...\e[0m'
+dpkg -i /home/$username/kainat-os-sources.deb || apt -f install -y
+echo -e '\n\e[1;34mInstalling kainat-os-core...\e[0m'
+apt update -y
 apt install -y kainat-os-core
 
-# Cleanup
-autoremove -y && apt clean
-DEBIAN_SETUP & spinner
+# Install KDE Plasma DE
+apt install -y plasma-desktop kde-plasma-desktop
 
-# 7. Build and install box64, box86, Wine
-echo -e "\n\e[1;34mInstalling box64, box86, and Wine...\e[0m"
-proot-distro login debian -- bash -eux << 'EMULATOR_SETUP'
+# Install audio, GPU, and utilities
+apt install -y pulseaudio pulseaudio-utils pavucontrol mesa-utils nano htop easyeffects gimp
 
-# Install build dependencies and i386 libs
+# — New Gaming Support Section —
+echo -e '\n\e[1;34mSetting up gaming support (Box64, Box86, Wine, Lutris)...\e[0m'
+
+# Enable 32‑bit support
 dpkg --add-architecture i386
 apt update -y
-apt install -y cmake git build-essential gcc g++ python3 \
-               libc6:i386 libstdc++6:i386 libx11-6:i386 libxext6:i386 \
-               libgl1-mesa-glx:i386 libfreetype6:i386 libglu1-mesa:i386 mesa-utils wget
 
-# Build box64
-cd /opt
-git clone https://github.com/ptitSeb/box64.git
-cd box64
-mkdir build && cd build
-cmake .. -DRUN_FROM_BUILD=1
-make -j"$(nproc)"
-ln -sf /opt/box64/build/box64 /usr/local/bin/box64
+# Install Box64 (x86_64 emulator) & Box86 (x86 emulator)
+apt install -y box64 box86
 
-# Build box86
-cd /opt
-git clone https://github.com/ptitSeb/box86.git
-cd box86
-mkdir build && cd build
-cmake .. -DRUN_FROM_BUILD=1
-make -j"$(nproc)"
-ln -sf /opt/box86/build/box86 /usr/local/bin/box86
+# Install Wine for running Windows games
+apt install -y wine wine32 wine64
 
-# Install Wine (32-bit)
-apt install -y wine32 winetricks
+# Install Lutris game manager
+apt install -y lutris
 
-# Environment wrappers
-echo 'export BOX64_LOG=1' >> /etc/profile
-echo 'export BOX86_LOG=1' >> /etc/profile
-echo 'alias wine="box86 wine"' >> /etc/profile
-EMULATOR_SETUP & spinner
+# If you need Proton support under Wine, you can configure it later via Winetricks.
 
-# 8. Create launch script
-echo -e "\n\e[1;34mCreating start script...\e[0m"
-cat << 'EOF' > "$PREFIX/bin/start-koslite"
-#!/usr/bin/env bash
+# Clean up
+apt autoremove -y && apt clean
 
-# Start Termux X11
+" & spinner
+
+# Create Termux start script
+echo -e "\n\e[1;34mCreating start script for KOS Lite...\e[0m"
+cat << 'EOF' > $PREFIX/bin/start-koslite
+#!/bin/bash
+source $PREFIX/etc/xuname
+
+# Launch X11, PulseAudio & VirGL
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity
-XDG_RUNTIME_DIR="${TMPDIR}" termux-x11 :1 -ac &
-
-# Start PulseAudio
+XDG_RUNTIME_DIR=\${TMPDIR}
+termux-x11 :1 -ac &
 pulseaudio --start --exit-idle-time=-1
-
-# Start VirGL server
 virgl_test_server_android &
 
-# Launch KDE in Debian
-proot-distro login --shared-tmp --user "$username" debian -- bash -lc '
+# Login to Debian and start KDE
+proot-distro login debian --user $username --shared-tmp -- bash -c "
     export DISPLAY=:1
     export PULSE_SERVER=127.0.0.1
     pactl load-module module-tunnel-source server=127.0.0.1
     startplasma-x11
-'
+"
 EOF
-chmod +x "$PREFIX/bin/start-koslite"
+chmod +x $PREFIX/bin/start-koslite
 
-# Done
-echo -e "\n\e[1;32mInstallation complete. Run 'start-koslite' to launch.\e[0m"
+# Save username
+echo "username=$username" > $PREFIX/etc/xuname
+
+echo -e "\nInstallation complete! Run 'start-koslite' to launch your Debian‑based desktop with gaming support."

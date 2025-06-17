@@ -113,7 +113,7 @@ proot-distro login --shared-tmp --user "$username" debian -- bash -c "
     pactl load-module module-tunnel-source server=127.0.0.1
     startplasma-x11
 "
-EOF
+'EOF'
 chmod +x $PREFIX/bin/start-koslite
 
 echo "Installation complete. Run 'start-koslite' to launch."

@@ -22,15 +22,20 @@ echo
 
 # KOS Lite Installation Script
 # License: GPL-3    local delay=0.1
-    local spinstr='|/-\\'
+# Animation: Spinning loader
+spinner() {
+    local pid=$!
+    local delay=0.1
+    local spinstr='|/-\'
     while [ "$(ps a | awk '{print $1}' | grep $pid)" ]; do
         local temp=${spinstr#?}
         printf " [%c]  " "$spinstr"
-        spinstr=$temp${spinstr%"$temp"}
+        local spinstr=$temp${spinstr%"$temp"}
         sleep $delay
         printf "\b\b\b\b\b\b"
     done
     printf "    \b\b\b\b"
+}
 
 # Update and upgrade Termux packages
 echo -e "\n\e[1;34mUpdating Termux packages...\e[0m"

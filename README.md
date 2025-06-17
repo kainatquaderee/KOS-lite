@@ -21,6 +21,11 @@ then run this to install KOS-lite
 ```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/kainatquaderee/KOS-lite/refs/heads/main/Install_kos-lite.sh)"
 ```
+
+or if you want to install the testing one:
+```
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/kainatquaderee/KOS-lite/refs/heads/main/testing.sh)"
+```
 then run with this:
 ```
 start-koslite

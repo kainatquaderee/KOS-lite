@@ -39,11 +39,11 @@ spinner() {
 
 # Update and upgrade Termux packages
 echo -e "\n\e[1;34mUpdating Termux packages...\e[0m"
-pkg update -y && pkg upgrade -y & t_spinner
+pkg update -y && pkg upgrade -y & spinner
 
 # Install required repositories and packages
 echo -e "\n\e[1;34mInstalling required Termux packages...\e[0m"
-pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa zlib & t_spinner
+pkg install -y x11-repo termux-x11-nightly tur-repo pulseaudio proot-distro wget git sox virglrenderer-android mesa zlib & spinner
 
 # Configure PulseAudio
 echo -e "\n\e[1;34mConfiguring PulseAudio...\e[0m"
@@ -61,7 +61,7 @@ echo
 
 # Install Debian via proot-distro
 echo -e "\n\e[1;34mInstalling Debian distribution...\e[0m"
-proot-distro install debian & t_spinner
+proot-distro install debian & spinner
 
 # Configure Debian environment
 echo -e "\n\e[1;34mConfiguring Debian environment...\e[0m"
@@ -89,7 +89,7 @@ apt install -y kainat-os-core
 # Cleanup
 autoremove -y && apt clean
 
-" & t_spinner
+" & spinner
 
 # Create launch script
 echo -e "\n\e[1;34mCreating start script...\e[0m"

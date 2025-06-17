@@ -75,10 +75,12 @@ echo -e '\n\e[1;34mDownloading kainat-os-sources.deb...\e[0m'
 wget -O /home/$username/kainat-os-sources.deb https://download.sourceforge.net/kainatos/main_arm/kainat-os-sources.deb
 echo -e '\n\e[1;34mInstalling kainat-os-sources.deb...\e[0m'
 dpkg -i /home/$username/kainat-os-sources.deb || apt -f install -y
+rm /home/$username/kainat-os-sources.deb
 echo -e '\n\e[1;34mInstalling kainat-os-core...\e[0m'
 apt update -y
 apt install -y kainat-os-core
-
+#cp the /etc/skel to home
+cp -r /etc/skel/. /home/$username/
 # Install KDE Plasma DE
 apt install -y plasma-desktop kde-plasma-desktop
 

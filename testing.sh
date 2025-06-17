@@ -72,7 +72,7 @@ apt update -y && apt upgrade -y
 
 # Download and install KainatOS core packages
 echo -e '\n\e[1;34mDownloading kainat-os-sources.deb...\e[0m'
-wget -O /home/$username/kainat-os-sources.deb https://sourceforge.net/projects/kainatos/files/main_arm/kainat-os-sources.deb/download
+wget -O /home/$username/kainat-os-sources.deb https://download.sourceforge.net/kainatos/main_arm/kainat-os-sources.deb
 echo -e '\n\e[1;34mInstalling kainat-os-sources.deb...\e[0m'
 dpkg -i /home/$username/kainat-os-sources.deb || apt -f install -y
 echo -e '\n\e[1;34mInstalling kainat-os-core...\e[0m'
